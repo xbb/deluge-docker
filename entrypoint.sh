@@ -7,8 +7,6 @@ PGID=${PGID:-1000}
 DELUGED_LOGLEVEL=${DELUGED_LOGLEVEL:-"warning"}
 DELUGED_LISTEN_ADDR=${DELUGED_LISTEN_ADDR:-"0.0.0.0"}
 
-GOSU="gosu $PUID:$PGID"
-
 # Directories
 HOME_DIR=/home/deluge
 CONF_DIR="$HOME_DIR/config"
@@ -34,20 +32,23 @@ if [ "$PGID" != "$CUR_GID" ]; then
     groupmod -o -g "$PGID" deluge
 fi
 
+GOSU="gosu $PUID:$PGID"
+DELUGE_CONSOLE="$GOSU /usr/bin/deluge-console -c $CONF_DIR"
+
 if [ ! -d "$CONF_DIR" ] || [ ! -f "$CONF_DIR/core.conf" ]; then
     $GOSU mkdir -p "$CONF_DIR" "$DOWNLOADS_DIR" "$COMPLETED_DIR" "$TORRENTS_DIR" "$AUTOADD_DIR"
     # start in daemon mode to configure it for the first time
     $GOSU /usr/bin/deluged -c "$CONF_DIR"
     sleep 3
     # use deluge-console to create the configuration
-    $GOSU /usr/bin/deluge-console -c "$CONF_DIR" "config"
-    $GOSU /usr/bin/deluge-console -c "$CONF_DIR" "config -s download_location $DOWNLOADS_DIR"
-    $GOSU /usr/bin/deluge-console -c "$CONF_DIR" "config -s move_completed_path $COMPLETED_DIR"
-    $GOSU /usr/bin/deluge-console -c "$CONF_DIR" "config -s torrentfiles_location $TORRENTS_DIR"
-    $GOSU /usr/bin/deluge-console -c "$CONF_DIR" "config -s autoadd_location $AUTOADD_DIR"
+    $DELUGE_CONSOLE "config"
+    $DELUGE_CONSOLE "config -s download_location $DOWNLOADS_DIR"
+    $DELUGE_CONSOLE "config -s move_completed_path $COMPLETED_DIR"
+    $DELUGE_CONSOLE "config -s torrentfiles_location $TORRENTS_DIR"
+    $DELUGE_CONSOLE "config -s autoadd_location $AUTOADD_DIR"
     sleep 3
     # stop the daemon
-    $GOSU /usr/bin/deluge-console -c "$CONF_DIR" "halt"
+    $DELUGE_CONSOLE "halt"
     sleep 3
 fi
 
