@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM public.ecr.aws/lts/ubuntu:18.04
 
 ARG DEBIAN_FRONTEND=noninteractive
 
