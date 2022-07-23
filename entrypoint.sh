@@ -16,7 +16,7 @@ TORRENTS_DIR="$HOME_DIR/torrents"
 AUTOADD_DIR="$HOME_DIR/autoadd"
 
 # Create deluge user and group
-id -u deluge >/dev/null 2>&1 || useradd -u $PUID -U -d $HOME_DIR -s /bin/false -m deluge
+id -u deluge >/dev/null 2>&1 || useradd -u "$PUID" -U -d $HOME_DIR -s /bin/false -m deluge
 
 # UID/GID check
 CUR_UID=$(getent passwd deluge | cut -f3 -d: || true)
@@ -41,11 +41,9 @@ if [ ! -d "$CONF_DIR" ] || [ ! -f "$CONF_DIR/core.conf" ]; then
     $GOSU /usr/bin/deluged -c "$CONF_DIR"
     sleep 3
     # use deluge-console to create the configuration
-    $DELUGE_CONSOLE "config"
-    $DELUGE_CONSOLE "config -s download_location $DOWNLOADS_DIR"
-    $DELUGE_CONSOLE "config -s move_completed_path $COMPLETED_DIR"
-    $DELUGE_CONSOLE "config -s torrentfiles_location $TORRENTS_DIR"
-    $DELUGE_CONSOLE "config -s autoadd_location $AUTOADD_DIR"
+    $DELUGE_CONSOLE "config --set download_location $DOWNLOADS_DIR"
+    $DELUGE_CONSOLE "config --set move_completed_path $COMPLETED_DIR"
+    $DELUGE_CONSOLE "config --set torrentfiles_location $TORRENTS_DIR"
     sleep 3
     # stop the daemon
     $DELUGE_CONSOLE "halt"
