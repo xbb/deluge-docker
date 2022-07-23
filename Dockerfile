@@ -21,5 +21,3 @@ RUN chmod 700 /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
 
 EXPOSE 58846/tcp 8112/tcp
-
-LABEL maintainer="nicola@xbblabs.com"
