@@ -50,4 +50,4 @@ if [ ! -d "$CONF_DIR" ] || [ ! -f "$CONF_DIR/core.conf" ]; then
     sleep 3
 fi
 
-exec $GOSU /sbin/tini -- /usr/bin/deluged -d -c "$CONF_DIR" -L "$DELUGED_LOGLEVEL" -u "$DELUGED_LISTEN_ADDR"
+exec $GOSU /usr/bin/tini -- /usr/bin/deluged -d -c "$CONF_DIR" -L "$DELUGED_LOGLEVEL" -u "$DELUGED_LISTEN_ADDR"
