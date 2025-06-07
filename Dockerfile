@@ -1,10 +1,10 @@
-FROM ubuntu:22.04
+FROM ubuntu:24.04
 
 ARG DELUGE_PPA_FP=8EED8FB4A8E6DA6DFDF0192BC5E6A5ED249AD24C
 
 RUN apt-get update \
 	&& DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends ca-certificates curl gnupg gosu net-tools tini   \
-	&& echo "deb https://ppa.launchpadcontent.net/deluge-team/stable/ubuntu/ jammy main" >> /etc/apt/sources.list \
+	&& echo "deb https://ppa.launchpadcontent.net/deluge-team/stable/ubuntu/ noble main" >> /etc/apt/sources.list \
 	&& curl -sSfL "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x${DELUGE_PPA_FP}" \
 		| gpg --no-default-keyring --dearmor -o /etc/apt/trusted.gpg.d/deluge.gpg \
 	&& apt-get update \
